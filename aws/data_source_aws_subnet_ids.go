@@ -38,6 +38,11 @@ func dataSourceAwsSubnetIDsRead(d *schema.ResourceData, meta interface{}) error 
 	req.Filters = buildEC2AttributeFilterList(
 		map[string]string{
 			"vpc-id": d.Get("vpc_id").(string),
+			"cidrBlock": d.Get("cidr_block").(string),
+			"mapPublicIpOnLaunch": d.Get("map_public_ip_on_launch").(string),
+			"defaultForAz": d.Get("default_for_az").(string),
+			"availabilityZone": d.Get("availability_zone").(string),
+			"state": d.Get("state").(string),
 		},
 	)
 
