@@ -26,6 +26,31 @@ func dataSourceAwsSubnetIDs() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Set:      schema.HashString,
 			},
+
+			"cidr_block": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"map_public_ip_on_launch": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"default_for_az": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+			},
+
+			"availability_zone": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"state": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -35,14 +60,24 @@ func dataSourceAwsSubnetIDsRead(d *schema.ResourceData, meta interface{}) error 
 
 	req := &ec2.DescribeSubnetsInput{}
 
+	defaultForAzStr := ""
+	if d.Get("default_for_az").(bool) {
+		defaultForAzStr = "true"
+	}
+
+	mapPublicIpOnLaunchStr := ""
+	if d.Get("map_public_ip_on_launch").(bool) {
+		mapPublicIpOnLaunchStr = "false"
+	}
+
 	req.Filters = buildEC2AttributeFilterList(
 		map[string]string{
-			"vpc-id": d.Get("vpc_id").(string),
-			"cidrBlock": d.Get("cidr_block").(string),
-			"mapPublicIpOnLaunch": d.Get("map_public_ip_on_launch").(string),
-			"defaultForAz": d.Get("default_for_az").(string),
-			"availabilityZone": d.Get("availability_zone").(string),
-			"state": d.Get("state").(string),
+			"vpc-id":              d.Get("vpc_id").(string),
+			"cidrBlock":           d.Get("cidr_block").(string),
+			"mapPublicIpOnLaunch": mapPublicIpOnLaunchStr,
+			"defaultForAz":        defaultForAzStr,
+			"availabilityZone":    d.Get("availability_zone").(string),
+			"state":               d.Get("state").(string),
 		},
 	)
 
