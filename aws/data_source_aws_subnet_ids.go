@@ -59,14 +59,14 @@ func dataSourceAwsSubnetIDsRead(d *schema.ResourceData, meta interface{}) error 
 
 	req := &ec2.DescribeSubnetsInput{}
 
-	defaultForAzStr := ""
+	defaultForAzStr := "false"
 	if d.Get("default_for_az").(bool) {
 		defaultForAzStr = "true"
 	}
 
-	mapPublicIpOnLaunchStr := ""
+	mapPublicIpOnLaunchStr := "false"
 	if d.Get("map_public_ip_on_launch").(bool) {
-		mapPublicIpOnLaunchStr = "false"
+		mapPublicIpOnLaunchStr = "true"
 	}
 
 	req.Filters = buildEC2AttributeFilterList(
