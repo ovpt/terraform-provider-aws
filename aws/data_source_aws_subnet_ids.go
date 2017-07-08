@@ -40,7 +40,6 @@ func dataSourceAwsSubnetIDs() *schema.Resource {
 			"default_for_az": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
-				Computed: true,
 			},
 
 			"availability_zone": &schema.Schema{
